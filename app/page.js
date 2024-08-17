@@ -1,7 +1,6 @@
 
-"use client";
 import Head from 'next/head';
-import FlashcardGenerator from './components/FlashcardGenerator';
+import Login from './login/page'; 
 
 export default function Home() {
   return (
@@ -11,8 +10,9 @@ export default function Home() {
         <meta name="description" content="Generate flashcards easily" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+    
       <main>
-        <FlashcardGenerator />
+        <Login />
       </main>
     </div>
   );

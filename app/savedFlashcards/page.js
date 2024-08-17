@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
-import { TextField } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 
 const Container = styled("div")({
   display: 'flex',
@@ -97,7 +97,15 @@ const FlipCardFront = styled("div")({
   fontSize: "1.5rem",
   fontWeight: 'bold', 
   fontStyle: 'italic',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'normal',  
+  wordBreak: 'break-word',  
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
 });
+
 
 const FlipCardBack = styled("div")({
   backgroundColor: "#8BCDBC",
@@ -145,6 +153,17 @@ const NoResultsText = styled("p")({
   fontWeight: "500",
 });
 
+const LogoutButton = styled(Button)({
+  position: 'absolute',
+  top: '20px',
+  right: '20px',
+  background: '#59A3AC',
+  color: '#fff',
+  '&:hover': {
+    background: '#c0392b',
+  },
+});
+
 const SavedFlashcards = () => {
   const [savedSets, setSavedSets] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -158,9 +177,15 @@ const SavedFlashcards = () => {
     set.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("user"); 
+    window.location.href = '/login';
+  };
+
   return (
     <Container>
       <Content>
+        <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
         <Title>Saved Flashcard Sets</Title>
         <SearchField
           variant="outlined"
@@ -196,5 +221,4 @@ const SavedFlashcards = () => {
     </Container>
   );
 };
-
 export default SavedFlashcards;
