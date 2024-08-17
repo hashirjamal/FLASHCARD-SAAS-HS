@@ -168,11 +168,11 @@ const FlashcardGenerator = () => {
     })
 
     const d = await response.json();
-    
-    // const str = d.a.substring(1,d.a.length);
-    const res = await JSON.parse(d);
     // console.log(d)
-    console.log(res)
+    
+    const str = d.substring(d.indexOf("["),d.indexOf("]")+1);
+    // console.log(str)
+    const res = await JSON.parse(str);
     setFlashcards(res);
     // console.log(typeof(d.a),"Response by browser")
   }
