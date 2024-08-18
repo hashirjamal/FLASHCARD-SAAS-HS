@@ -155,6 +155,16 @@ const NoResultsText = styled("p")({
   fontWeight: "500",
 });
 
+const LinkBtn = styled(Button)({
+  position: 'absolute',
+  top: '20px',
+  left: '20px',
+  background: '#59A3AC',
+  color: '#fff',
+  '&:hover': {
+    background: '#c0392b',
+  },
+});
 const LogoutButton = styled(Button)({
   position: 'absolute',
   top: '20px',
@@ -231,7 +241,12 @@ const SavedFlashcards = () => {
   return (
     <Container>
       <Content>
+      
+      {/* <div style={{"display":"flex","justifyContent":"space-between"}}> */}
+        <LinkBtn href="/flashcard-generator"  >Generate Flashcards</LinkBtn>
         <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+
+      {/* </div> */}
         <Title>Saved Flashcard Sets</Title>
         <SearchField
           variant="outlined"

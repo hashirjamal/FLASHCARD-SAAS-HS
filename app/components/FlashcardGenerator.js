@@ -44,6 +44,7 @@ const Title = styled('h1')({
 
 const Input = styled(TextField)({
   marginBottom: '20px',
+  
   width: '100%',
   maxWidth: '500px',
   '& .MuiInputLabel-root': {
@@ -146,6 +147,18 @@ const LogoutButton = styled(Button)({
   },
   zIndex: 2, 
 });
+
+const LinkBtn = styled(Button)({
+  position: 'absolute',
+  top: '20px',
+  left: '20px',
+  background: '#59A3AC',
+  color: '#fff',
+  '&:hover': {
+    background: '#c0392b',
+  },
+});
+
 
 const FlashcardGenerator = () => {
   const [category, setCategory] = useState('');
@@ -274,13 +287,20 @@ finally{
   return (
     <Container>
       <Content>
+
+        <LinkBtn href='/savedFlashcards'>Saved Flash Cards</LinkBtn>
+
         <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
         <Title>Generate Flashcards</Title>
         <Input
           label="Enter Text"
+          // rows={10}
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           variant="outlined"
+          multiline
+  rows={8} // Set the initial height with rows
+  
         />
         <ButtonContainer>
           <Button variant="contained" color="primary" onClick={handleGenerate}>
