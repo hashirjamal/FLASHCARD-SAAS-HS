@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '@/firebase.config';
+import { signOut } from 'firebase/auth';
 
 const Container = styled('div')({
   display: 'flex',
@@ -254,9 +255,20 @@ finally{
     }
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('user'); 
-    window.location.href = '/login';
+  const handleLogout = async () => {
+
+    try{
+      const res = await signOut(auth);
+      sessionStorage.removeItem('user'); 
+      window.location.href = '/login';
+
+    }
+    catch(e){
+      console.error(e)
+    }
+
+    
+
   };
 
   return (

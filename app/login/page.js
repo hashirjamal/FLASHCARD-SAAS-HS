@@ -5,7 +5,10 @@ import { TextField, Button, Typography, IconButton, Snackbar, Alert } from '@mui
 import Link from 'next/link';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/firebase.config';
+
+
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -147,7 +150,7 @@ const Login = () => {
   onAuthStateChanged(auth,(user)=>{
 
     if(user){
-      sessionStorage.setItem("user",JSON.parse({userId:user.uid}))
+      sessionStorage.setItem("user",JSON.stringify({userId:user.uid}))
     }
 
 
@@ -156,25 +159,48 @@ const Login = () => {
 
 
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const hardCodedUser = {
-      email: 'test@example.com',
-      password: 'password123',
-    };
+  const handleLogin = async (e) => {
 
-    if (email === hardCodedUser.email && password === hardCodedUser.password) {
+    e.preventDefault();
+
+    console.log(email,password)
+
+
+    try{
+      const res = await signInWithEmailAndPassword(auth,email,password);
+      
       setSnackbarMessage('Login successful');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
       setTimeout(() => {
         window.location.href = '/flashcard-generator';
-      }, 1500); // Delay to show Snackbar
-    } else {
+      }, 1500);// Delay to show Snackbar
+
+    }
+    catch(e){
+      
+      console.log(e)
       setSnackbarMessage('Invalid email or password');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
+
     }
+
+    // signInWithEmailAndPassword(auth,(auth,email,password))
+    // .then((user)=>{
+      
+    //   setSnackbarMessage('Login successful');
+    //   setSnackbarSeverity('success');
+    //   setSnackbarOpen(true);
+    //   setTimeout(() => {
+    //     window.location.href = '/flashcard-generator';
+    //   }, 1500);// Delay to show Snackbar
+    // })
+    // .catch((e)=>{
+
+    // })
+
+    
   };
 
   const togglePasswordVisibility = () => {
