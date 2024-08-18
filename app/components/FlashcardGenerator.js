@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 import { addDoc, collection } from 'firebase/firestore';
-import { db } from '@/firebase.config';
+import { db,auth } from '@/firebase.config';
 import { signOut } from 'firebase/auth';
 
 const Container = styled('div')({

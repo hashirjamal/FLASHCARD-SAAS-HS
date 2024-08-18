@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { TextField, Button } from "@mui/material";
 import { collection, getDoc,getDocs,query,where } from "firebase/firestore";
-import { db } from "@/firebase.config";
+import { db,auth } from "@/firebase.config";
+import { signOut } from "firebase/auth";
+
 
 const Container = styled("div")({
   display: 'flex',
@@ -230,10 +232,22 @@ const SavedFlashcards = () => {
   //[  {topic:"",flashcars:""}  ]
   
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("user"); 
-    window.location.href = '/login';
+  const handleLogout = async () => {
+
+    try{
+      const res = await signOut(auth);
+      sessionStorage.removeItem('user'); 
+      window.location.href = '/login';
+
+    }
+    catch(e){
+      console.error(e)
+    }
+
+    
+
   };
+
 
   // console.log("saved sets: ",savedSets)
   // console.log("filtered sets: ",filteredSets)
