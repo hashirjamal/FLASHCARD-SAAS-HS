@@ -324,7 +324,7 @@ const Login = () => {
 					<ServiceCard>
 						<CardTitle>Basic Flashcard Service</CardTitle>
 						<CardDescription>
-							Access to basic flashcard creation tools, ideal for
+							Access to basic flashcard creation tools with limited storage, ideal for
 							students and educators.
 						</CardDescription>
 						<Link
@@ -337,8 +337,8 @@ const Login = () => {
 					<ServiceCard>
 						<CardTitle>Premium Flashcard Service</CardTitle>
 						<CardDescription>
-							Advanced features including AI-powered flashcard
-							generation and personalized learning tracks.
+							Advanced features includes more storage
+							and personalized learning tracks.
 						</CardDescription>
 						<Link
 							href="https://buy.stripe.com/test_9AQg1w56acICaje3cd"
