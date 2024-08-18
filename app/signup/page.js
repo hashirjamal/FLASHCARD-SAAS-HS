@@ -5,6 +5,9 @@ import { TextField, Button, Typography, IconButton, Snackbar, Alert } from '@mui
 import Link from 'next/link';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '@/firebase.config';
+import { addDoc, collection } from 'firebase/firestore';
 
 const fadeIn = keyframes`
   from {
@@ -113,6 +116,8 @@ const FooterLinks = styled('div')({
   marginTop: '20px',
 });
 
+
+
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -123,28 +128,48 @@ const Signup = () => {
 
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSignup = (e) => {
-    e.preventDefault();
 
+  
+
+
+  const handleSignup = async (e) => {
+
+    
+    e.preventDefault();
+    
     if (!isValidEmail(email)) {
       setSnackbarMessage('Please enter a valid email address.');
       setSnackbarOpen(true);
       return;
     }
-
+    
     if (password !== confirmPassword) {
       setSnackbarMessage('Passwords do not match.');
       setSnackbarOpen(true);
       return;
     }
 
-    localStorage.setItem('user', JSON.stringify({ email, password }));
-    setSnackbarMessage('Signup successful!');
-    setSnackbarOpen(true);
-    setTimeout(() => {
-      window.location.href = '/flashcard-generator';
-    }, 1500); // Delay to show Snackbar
-  };
+    try{
+
+      const res = await createUserWithEmailAndPassword(auth,email,password)
+
+      console.log(res.user.uid+"hello")
+
+      sessionStorage.setItem('user', JSON.stringify({userId:res.user.uid}));
+      setSnackbarMessage('Signup successful!');
+      setSnackbarOpen(true);
+      setTimeout(() => {
+        window.location.href = '/flashcard-generator';
+      }, 1500); // Delay to show Snackbar
+      
+
+      
+    }
+catch(e){
+  console.error(e)
+}
+};
+    
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);

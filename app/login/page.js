@@ -5,6 +5,7 @@ import { TextField, Button, Typography, IconButton, Snackbar, Alert } from '@mui
 import Link from 'next/link';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { onAuthStateChanged } from 'firebase/auth';
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -141,6 +142,19 @@ const Login = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+
+  onAuthStateChanged(auth,(user)=>{
+
+    if(user){
+      sessionStorage.setItem("user",JSON.parse({userId:user.uid}))
+    }
+
+
+  })
+
+
+
 
   const handleLogin = (e) => {
     e.preventDefault();

@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '@/firebase.config';
 
 const Container = styled('div')({
   display: 'flex',
@@ -209,16 +211,46 @@ const FlashcardGenerator = () => {
     setFlippedIndex(index === flippedIndex ? null : index);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+
+
+
     if (setName) {
-      const newSet = { name: setName, flashcards };
-      setSavedSets([...savedSets, newSet]);
-      sessionStorage.setItem('savedSets', JSON.stringify([...savedSets, newSet]));
-      setSetName('');
-      setFlashcards([]);
-      setCategory('');
-      setOpenDialog(false);
-      window.open('/savedFlashcards', '_blank');
+
+      const uid= JSON.parse(sessionStorage.getItem("user")).userId;
+
+      const collRef  = collection(db,"flashcards");
+try{
+
+  flashcards.map(async (f)=>{
+    
+   let res=  await addDoc(collRef,{
+      topic:setName,
+      question: f.question,
+      answer: f.answer,
+      userId:uid
+    })
+
+    console.log(res);
+    window.open('/savedFlashcards', '_blank');
+
+  })
+}
+catch(e){
+  alert("Something went wrong");
+  console.error(e)
+}
+finally{
+
+  setSetName('');
+  setFlashcards([]);
+  setCategory('');
+  setOpenDialog(false);
+}
+
+      // const newSet = { name: setName, flashcards, };
+      // setSavedSets([...savedSets, newSet]);
+      // sessionStorage.setItem('savedSets', JSON.stringify([...savedSets, newSet]));
     }
   };
 

@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { TextField, Button } from "@mui/material";
+import { collection, getDoc,getDocs,query,where } from "firebase/firestore";
+import { db } from "@/firebase.config";
 
 const Container = styled("div")({
   display: 'flex',
@@ -168,19 +170,63 @@ const SavedFlashcards = () => {
   const [savedSets, setSavedSets] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [cards,setCards] = useState({
+    "topic":[]
+  })
+
   useEffect(() => {
+
+    const getData = async ()=>{
+
+      const collRef = collection(db,"flashcards");
+  
+      const uid= JSON.parse(sessionStorage.getItem("user")).userId;
+      const q = query(collRef, where("userId" ,"==",uid))
+  
+      const querySnapshot = await getDocs(q);
+  
+      let retrieved = []
+
+      let obj ={}
+       querySnapshot.forEach( d=>{
+        // let dt = await d.data();
+        console.log(d.data());
+
+        let data = d.data();
+
+        if (!obj[data.topic]) {
+          obj[data.topic] = []; // Initialize the array if it doesn't exist
+      }
+      
+      obj[data.topic].push({
+          question: data.question,
+          answer: data.answer,
+      });
+        // retrieved.push(d.data());
+      })
+      setSavedSets(obj);
+    }
+
+    getData();
+    // const flashCardDocs = await getDoc
+
     const saved = JSON.parse(sessionStorage.getItem("savedSets")) || [];
-    setSavedSets(saved);
   }, []);
 
-  const filteredSets = savedSets.filter((set) =>
-    set.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredSets = Object.keys(savedSets).filter((set) =>
+    set.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  //[  {topic:"",flashcars:""}  ]
+  
 
   const handleLogout = () => {
     sessionStorage.removeItem("user"); 
     window.location.href = '/login';
   };
+
+  // console.log("saved sets: ",savedSets)
+  // console.log("filtered sets: ",filteredSets)
 
   return (
     <Container>
@@ -197,13 +243,15 @@ const SavedFlashcards = () => {
         {filteredSets.length > 0 ? (
           <CardGrid>
             {filteredSets.map((set, index) => (
+              
               <FlashcardSet key={index}>
                 <FlipCardInner className="flip-card-inner">
                   <FlipCardFront>
-                    <h2>{set.name}</h2>
+                    <h2>{set}</h2>
                   </FlipCardFront>
                   <FlipCardBack>
-                    {set.flashcards.map((flashcard, i) => (
+                  {  console.log("here ",savedSets[set])}
+                    {savedSets[set].map((flashcard, i) => (
                       <QuestionAnswerSet key={i}>
                         <Question>{flashcard.question}</Question>
                         <Answer>{flashcard.answer}</Answer>
